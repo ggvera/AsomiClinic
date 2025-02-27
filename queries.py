@@ -27,7 +27,6 @@ def with_session(func):
 def get_list_doctor(session):
     medicos = (
         session.query(
-            Medico.id_medico,
             Medico.cedula,
             Medico.codigo,
             Medico.nombre,
@@ -35,19 +34,19 @@ def get_list_doctor(session):
             Especialidad.nombre.label('especialidad')
         )
         .join(Especialidad, Medico.id_especialidad == Especialidad.id_especialidad)
-        .order_by(Medico.apellidos, Medico.nombre)
+        .order_by(Medico.apellidos)
         .all()
     )
 
     print("\n=== LISTADO DE MÉDICOS ===")
-    header = f"{'ID':<5}{'Cédula':<15}{'Código':<10}{'Nombre':<15}{'Apellidos':<20}{'Especialidad':<20}"
+    header = f"{'Cédula':<15}{'Código':<10}{'Nombre':<15}{'Apellidos':<20}{'Especialidad':<20}"
     print("-" * 80)
     print(header)
     print("-" * 80)
 
     for medico in medicos:
         print(
-            f"{medico.id_medico:<5}{medico.cedula:<15}{medico.codigo:<10}{medico.nombre:<15}{medico.apellidos:<20}{medico.especialidad:<20}")
+            f"{medico.cedula:<15}{medico.codigo:<10}{medico.nombre:<15}{medico.apellidos:<20}{medico.especialidad:<20}")
 
 
 @with_session
@@ -59,7 +58,7 @@ def get_list_registered_patients(session):
             Paciente.apellidos
         )
         .join(Ingreso, Paciente.id_paciente == Ingreso.id_paciente)
-        .order_by(Paciente.apellidos, Paciente.nombre)
+        .order_by(Paciente.apellidos)
         .distinct()
         .all()
     )
@@ -82,22 +81,23 @@ def get_list_care_provided_doctor(session):
             Medico.nombre,
             Medico.apellidos,
             Medico.codigo,
-            func.count(Ingreso.id_medico).label('Total_consultas')
+            func.count(Ingreso.id_medico).label('Total_Atenciones')
         )
         .select_from(Medico)
         .outerjoin(Ingreso, Medico.id_medico == Ingreso.id_medico)
         .group_by(Medico.id_medico, Medico.nombre, Medico.apellidos, Medico.codigo)
+        .order_by(desc(func.count(Ingreso.id_medico)))
         .all()
     )
 
-    print("\n=== LISTADO DE ATENCIONES POR MÉDICO ===")
-    header = f"{'Nombre':<15}{'Apellidos':<20}{'Código':<10}{'Total Consultas':<15}"
+    print("\n=== TOTAL DE ATENCIONES REALIZADAS POR CADA MEDICO ===")
+    header = f"{'Nombre':<15}{'Apellidos':<20}{'Código':<10}{'Total Atenciones':<15}"
     print("-" * 60)
     print(header)
     print("-" * 60)
 
     for result in results:
-        print(f"{result.nombre:<15}{result.apellidos:<20}{result.codigo:<10}{result.Total_consultas:<15}")
+        print(f"{result.nombre:<15}{result.apellidos:<20}{result.codigo:<10}{result.Total_Atenciones:<15}")
 
 
 @with_session

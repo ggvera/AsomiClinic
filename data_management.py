@@ -63,7 +63,7 @@ def register_doctor_with_specialty_selection(session, id_number, code, first_nam
             print(f"Ya existe un médico con código {code}")
             return None
 
-        specialties = list_specialties(session)
+        specialties = list_specialties()
 
         if not specialties:
             print("Debe registrar especialidades antes de registrar médicos")
@@ -256,7 +256,7 @@ def register_patient_admission(session, patient_id_number, doctor_code, room_num
         print(f"{'Médico':<15}{doctor.nombre + ' ' + doctor.apellidos:<50}")
         print(f"{'Habitación':<15}{room.numero_habitacion:<50}")
         print(f"{'Diagnóstico':<15}{diagnosis:<50}")
-        print(f"{'Fecha Ingreso':<15}{new_admission.fecha_ingreso:<50}")
+        print(f"{'Fecha Ingreso':<15}{new_admission.fecha_ingreso.strftime('%Y-%m-%d %H:%M:%S'):<50}")
 
         return new_admission
     except Exception as e:
@@ -290,8 +290,8 @@ def register_patient_discharge(session, admission_id):
         print(header)
         print("=" * 65)
         print(f"{'Paciente':<15}{patient.nombre + ' ' + patient.apellidos:<50}")
-        print(f"{'Fecha Ingreso':<15}{admission.fecha_ingreso:<50}")
-        print(f"{'Fecha Salida':<15}{admission.fecha_salida:<50}")
+        print(f"{'Fecha Ingreso':<15}{admission.fecha_ingreso.strftime('%Y-%m-%d %H:%M:%S'):<50}")
+        print(f"{'Fecha Salida':<15}{admission.fecha_salida.strftime('%Y-%m-%d %H:%M:%S'):<50}")
         print(f"{'Duración':<15}{duration_days} días")
 
         return admission
@@ -366,7 +366,7 @@ def register_patient_and_admission(session, id_number, first_name, last_name, bi
         print(f"{'Médico':<15}{doctor.nombre + ' ' + doctor.apellidos:<50}")
         print(f"{'Habitación':<15}{room.numero_habitacion:<50}")
         print(f"{'Diagnóstico':<15}{diagnosis:<50}")
-        print(f"{'Fecha Ingreso':<15}{new_admission.fecha_ingreso:<50}")
+        print(f"{'Fecha Ingreso':<15}{new_admission.fecha_ingreso.strftime('%Y-%m-%d %H:%M:%S'):<50}")
 
         return (new_patient, new_admission)
     except Exception as e:

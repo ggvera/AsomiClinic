@@ -4,6 +4,7 @@ from database import create_database
 from queries import (get_list_doctor, get_list_registered_patients, get_list_care_provided_doctor,
                      get_list_all_patient_income, get_three_specialties_with_most_requests,
                      get_doctor_with_the_highest_income)
+from seed import seed_database
 
 
 def specialty_administration_menu():
@@ -299,7 +300,8 @@ def main_menu():
         print("4. Administración de habitaciones")
         print("5. Administración de ingresos y salidas")
         print("6. Reportes del sistema")
-        print("7. Salir")
+        print("7. Insertar datos iniciales")
+        print("8. Salir")
 
         option = input("\nSeleccione una opción: ")
 
@@ -322,6 +324,9 @@ def main_menu():
             reports_menu()
 
         elif option == "7":
+            seed_database()
+
+        elif option == "8":
             print("¡Gracias por utilizar el sistema ASOMI!")
             break
 
@@ -334,7 +339,7 @@ def reports_menu():
         print("\n==== REPORTES DEL SISTEMA ====")
         print("1. Listar médicos")
         print("2. Listar pacientes registrados")
-        print("3. Atenciones de pacientes realizadas por médico")
+        print("3. Número de atenciones realizadas por cada medico")
         print("4. Número de ingresos a la clínica por paciente")
         print("5. Listar las tres especialidades más solicitadas")
         print("6. Médico actual con mayor ingreso de pacientes")
